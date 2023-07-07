@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: umi-react-c
+    image: umi-react-i
+    build:
+      context: .
+    ports:
+      - 8000:80
