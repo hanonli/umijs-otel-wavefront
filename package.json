@@ -9,6 +9,12 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@opentelemetry/exporter-trace-otlp-http": "^0.41.0",
+    "@opentelemetry/instrumentation": "^0.41.0",
+    "@opentelemetry/instrumentation-fetch": "^0.41.0",
+    "@opentelemetry/resources": "^1.15.0",
+    "@opentelemetry/sdk-trace-web": "^1.15.0",
+    "@opentelemetry/semantic-conventions": "^1.15.0",
     "umi": "^4.0.72"
   },
   "devDependencies": {

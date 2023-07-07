@@ -1,10 +1,22 @@
 version: '3.8'
 
 services:
-  app:
-    container_name: umi-react-c
-    image: umi-react-i
+  umi-app:
     build:
       context: .
+    depends_on:
+      - collector
     ports:
       - 8000:80
+    env_file:
+      - ./src/.env
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=collector:4318
+      - DEMO_SERVER_ENDPOINT="http://localhost:8000"
+  collector:
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/otel-collector-config.yaml"]
+    volumes:
+      - './otel-collector-config.yaml:/otel-collector-config.yaml'
+    ports:
+      - 4318:4318

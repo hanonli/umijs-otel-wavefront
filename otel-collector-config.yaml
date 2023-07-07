@@ -1,0 +1,35 @@
+receivers: # how data gets into the Collector
+  # Data sources: traces, metrics, logs
+  otlp:
+    protocols:
+      grpc:
+      http:
+        cors:
+          allowed_origins: ["*"]
+          allowed_headers: ["*"]
+          
+exporters: # how you send data to one or more backends/destinations
+  otlp:
+    endpoint: "localhost:4317"
+    tls:
+      insecure: true
+  logging:
+    verbosity: detailed
+
+processors: # run on data between being received and being exported
+  # Data sources: traces, metrics, logs
+  batch:
+
+service:
+  telemetry:
+    logs:
+      level: "debug"
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [otlp, logging]
+      processors: [batch]
+    metrics:
+      receivers: [otlp]
+      exporters: [otlp, logging]
+      processors: [batch]
