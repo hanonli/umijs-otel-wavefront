@@ -8,19 +8,19 @@ import { Resource } from '@opentelemetry/resources';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 
 const collectorExporter = new OTLPTraceExporter({
-  // url: "http://10.10.70.112:4318/v1/traces",
+  // url: "http://10.10.70.112:4318/v1/traces", << cors problem
+  // use default http://localhost:4318/v1/traces
   headers: {}
 });
 
 const providerConfig: TracerConfig = {
   resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'umi-app',
+    [SemanticResourceAttributes.SERVICE_NAME]: 'umi-app', // or call APP_NAME by calling process.env.APP_NAME 
   }),
 };
 
 const provider = new WebTracerProvider(providerConfig);
 
-// we will use ConsoleSpanExporter to check the generated spans in dev console
 provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
 provider.addSpanProcessor(new BatchSpanProcessor(collectorExporter));
 
@@ -30,13 +30,9 @@ provider.register({
 
 registerInstrumentations({
   instrumentations: [
-    // getWebAutoInstrumentations initializes all the package.
-	// it's possible to configure each instrumentation if needed.
     getWebAutoInstrumentations({
       '@opentelemetry/instrumentation-fetch': {
-			// config can be added here for example 
-			// we can initialize the instrumentation only for prod
-			// enabled: import.meta.env.PROD,		
+	
       },
     }),
   ],
